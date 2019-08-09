@@ -1,0 +1,7 @@
+[27-Jul-2019 18:06:24 Asia/Jakarta] PHP Fatal error:  Call to undefined function random_bytes() in /home/balires/public_html/kas/application/controllers/Auth.php on line 119
+[27-Jul-2019 18:13:30 Asia/Jakarta] PHP Parse error:  syntax error, unexpected ')' in /home/balires/public_html/kas/application/views/operasional/masuk.php on line 50
+[27-Jul-2019 18:13:35 Asia/Jakarta] PHP Parse error:  syntax error, unexpected ')' in /home/balires/public_html/kas/application/views/operasional/keluar.php on line 49
+[27-Jul-2019 18:13:41 Asia/Jakarta] PHP Parse error:  syntax error, unexpected ')' in /home/balires/public_html/kas/application/views/kantor/masuk.php on line 49
+[27-Jul-2019 18:14:00 Asia/Jakarta] PHP Parse error:  syntax error, unexpected ')' in /home/balires/public_html/kas/application/views/kantor/masuk.php on line 49
+[27-Jul-2019 18:21:19 Asia/Jakarta] PHP Parse error:  syntax error, unexpected ')' in /home/balires/public_html/kas/application/views/operasional/keluar.php on line 49
+[27-Jul-2019 18:21:28 Asia/Jakarta] PHP Parse error:  syntax error, unexpected ')' in /home/balires/public_html/kas/application/views/kantor/keluar.php on line 49
