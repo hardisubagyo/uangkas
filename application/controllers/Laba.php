@@ -72,7 +72,7 @@ class Laba extends CI_Controller
             ")->result();
 
         foreach($get as $item){
-            $data['keterangan'] = $item->customer;
+            $data['keterangan'] = $item->customer.' ('.$item->no_invoice.')';
             $data['tanggal'] = $item->tgl;
             $data['jumlah'] = $item->kantor;
 

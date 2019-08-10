@@ -93,6 +93,7 @@
                         var kantor = saldo_laba - andi - rasit;
 
                         var markup = "<tr>\
+                        <td><input type='checkbox' name='record'></td>\
                         <td><input type='text' class='form-control' name='nama_customer[]' readonly value='" + nama_customer + "'></td>\
                         <td><input type='text' class='form-control' name='no_invoice[]' readonly value='" + no_invoice + "'></td>\
                         <td><input type='text' class='form-control' name='total_invoice[]' readonly value='" + total_invoice + "'></td>\
@@ -157,9 +158,67 @@
                         $('#total_andi').val(tot_andi);
                         $('#total_rasit').val(tot_rasit);
                         $('#total_kantor').val(tot_kantor);
-                        
                     });
-                });    
+
+                    $(".delete-row").click(function(){
+                        $("table tbody").find('input[name="record"]').each(function(){
+                            if($(this).is(":checked")){
+                                $(this).parents("tr").remove();
+                            }
+                        });
+
+                        var all_total_invoice = document.getElementsByName('total_invoice[]');
+                        var all_zai = document.getElementsByName('zai[]');
+                        var all_saldo_laba = document.getElementsByName('saldo_laba[]');
+                        var all_andi = document.getElementsByName('andi[]');
+                        var all_rasit = document.getElementsByName('rasit[]');
+                        var all_kantor = document.getElementsByName('kantor[]');
+
+                        var tot_total_invoice = 0;
+                        var tot_zai = 0;
+                        var tot_saldo_laba = 0;
+                        var tot_andi = 0;
+                        var tot_rasit = 0;
+                        var tot_kantor = 0;
+
+                        for(var i=0;i<all_total_invoice.length;i++){
+                            if(parseInt(all_total_invoice[i].value))
+                                tot_total_invoice += parseInt(all_total_invoice[i].value);
+                        }
+
+                        for(var i=0;i<all_zai.length;i++){
+                            if(parseInt(all_zai[i].value))
+                                tot_zai += parseInt(all_zai[i].value);
+                        }
+
+                        for(var i=0;i<all_saldo_laba.length;i++){
+                            if(parseInt(all_saldo_laba[i].value))
+                                tot_saldo_laba += parseInt(all_saldo_laba[i].value);
+                        }
+
+                        for(var i=0;i<all_andi.length;i++){
+                            if(parseInt(all_andi[i].value))
+                                tot_andi += parseInt(all_andi[i].value);
+                        }
+
+                        for(var i=0;i<all_rasit.length;i++){
+                            if(parseInt(all_rasit[i].value))
+                                tot_rasit += parseInt(all_rasit[i].value);
+                        }
+
+                        for(var i=0;i<all_kantor.length;i++){
+                            if(parseInt(all_kantor[i].value))
+                                tot_kantor += parseInt(all_kantor[i].value);
+                        }
+                        
+                        $('#total_invoice_all').val(tot_total_invoice);
+                        $('#total_zai').val(tot_zai);
+                        $('#total_saldo_laba').val(tot_saldo_laba);
+                        $('#total_andi').val(tot_andi);
+                        $('#total_rasit').val(tot_rasit);
+                        $('#total_kantor').val(tot_kantor);
+                    });
+                });
             </script>
             <form class="form-inline" id="input-form">
                 <center>
@@ -176,6 +235,7 @@
                     <table class="table" id="forminput">
                         <thead>
                             <tr>
+                                <th></th>
                                 <th>Customer</th>
                                 <th>No Invoice</th>
                                 <th>Total Invoice</th>
@@ -191,7 +251,7 @@
                         <tbody id="form-body"></tbody>
                         <tfoot id="t_foot">
                             <tr>
-                                <th colspan="2">Total</th>
+                                <th colspan="3">Total</th>
                                 <th><input type="text" class="form-control" name="total_invoice_all" id="total_invoice_all" readonly></th>
                                 <th>&nbsp;</th>
                                 <th><input type="text" class="form-control" name="total_zai" id="total_zai" readonly></th>
@@ -205,6 +265,7 @@
                     </table>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-danger delete-row">Hapus</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
