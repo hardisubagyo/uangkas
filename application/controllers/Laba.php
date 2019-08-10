@@ -66,13 +66,14 @@ class Laba extends CI_Controller
                 SELECT 
                     list_laba.customer,
                     list_laba.kantor,
+                    list_laba.invoice,
                     laba.tgl
                 FROM list_laba
                 JOIN laba ON laba.id_laba = list_laba.id_laba
             ")->result();
 
         foreach($get as $item){
-            $data['keterangan'] = $item->customer.' ('.$item->no_invoice.')';
+            $data['keterangan'] = $item->customer.' ('.$item->invoice.')';
             $data['tanggal'] = $item->tgl;
             $data['jumlah'] = $item->kantor;
 
@@ -169,15 +170,15 @@ class Laba extends CI_Controller
 
         $mpdf->WriteHTML('
             <tr>
-                <th colspan="2">Total</th>
-                <th>'.number_format($laba->total_invoice,0,'.','.').'</th>
-                <th></th>
-                <th>'.number_format($laba->total_zai,0,'.','.').'</th>
-                <th></th>
-                <th>'.number_format($laba->total_saldo_laba,0,'.','.').'</th>
-                <th>'.number_format($laba->total_andi,0,'.','.').'</th>
-                <th>'.number_format($laba->total_rasit,0,'.','.').'</th>
-                <th>'.number_format($laba->total_kantor,0,'.','.').'</th>
+                <td colspan="2"><b>Total</b></td>
+                <td><b>'.number_format($laba->total_invoice,0,'.','.').'</b></td>
+                <td></td>
+                <td><b>'.number_format($laba->total_zai,0,'.','.').'</b></td>
+                <td></td>
+                <td><b>'.number_format($laba->total_saldo_laba,0,'.','.').'</b></td>
+                <td><b>'.number_format($laba->total_andi,0,'.','.').'</b></td>
+                <td><b>'.number_format($laba->total_rasit,0,'.','.').'</b></td>
+                <td><b>'.number_format($laba->total_kantor,0,'.','.').'</b></td>
             </tr>
         ');
 
@@ -232,6 +233,90 @@ class Laba extends CI_Controller
             $excel_row++;
             $no++;
         }
+
+        $filename = date('Ymd His');
+        $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel2007');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Laba' . $filename . '.xlsx"');
+        header('Cache-Cpontrol: max-age=0');
+        $object_writer->save('php://output');
+    }
+
+    public function detailexcel($id){
+        $listlaba = $this->M_model->read('list_laba', array('id_laba' => $id))->result();
+        $laba = $this->M_model->read('laba', array('id_laba' => $id))->row();
+
+        $this->load->library("excel");
+        $object = new PHPExcel();
+
+        $object->setActiveSheetIndex(0);
+
+        $table_columns = array(
+            "No",
+            "Customen",
+            "No Invoice",
+            "Total Invoice",
+            "Keterangan",
+            "Zai (2,5%)",
+            "Biaya Produksi",
+            "Saldo Laba",
+            "Andi (30%)",
+            "Rasit (30%)",
+            "Kantor (40%)"
+        );
+
+        $column = 0;
+
+        foreach($table_columns as $field){
+           $object->getActiveSheet()->setCellValueByColumnAndRow($column, 1, $field);
+           $column++;
+        }
+
+        $object->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $object->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $object->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $object->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $object->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $object->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $object->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $object->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $object->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $object->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $object->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+
+        $object->getActiveSheet()->getStyle("A1:K1")->getFont()->setBold( true );
+
+        $excel_row = 2;
+        $no = 1;
+
+        foreach($listlaba as $row){
+            $object->getActiveSheet()->setCellValueByColumnAndRow(0, $excel_row, $no);
+            $object->getActiveSheet()->setCellValueByColumnAndRow(1, $excel_row, $row->customer);
+            $object->getActiveSheet()->setCellValueByColumnAndRow(2, $excel_row, $row->invoice);
+            $object->getActiveSheet()->setCellValueByColumnAndRow(3, $excel_row, $row->total_invoice);
+            $object->getActiveSheet()->setCellValueByColumnAndRow(4, $excel_row, $row->keterangan);
+            $object->getActiveSheet()->setCellValueByColumnAndRow(5, $excel_row, $row->zai);
+            $object->getActiveSheet()->setCellValueByColumnAndRow(6, $excel_row, $row->biaya_produksi);
+            $object->getActiveSheet()->setCellValueByColumnAndRow(7, $excel_row, $row->saldo_laba);
+            $object->getActiveSheet()->setCellValueByColumnAndRow(8, $excel_row, $row->andi);
+            $object->getActiveSheet()->setCellValueByColumnAndRow(9, $excel_row, $row->rasit);
+            $object->getActiveSheet()->setCellValueByColumnAndRow(10, $excel_row, $row->kantor);
+            $excel_row++;
+            $no++;
+        }
+
+        $total_row = count($listlaba) + 2;
+        $object->getActiveSheet()->setCellValueByColumnAndRow(0, $total_row, 'TOTAL');
+        $object->getActiveSheet()->setCellValueByColumnAndRow(1, $total_row, '');
+        $object->getActiveSheet()->setCellValueByColumnAndRow(2, $total_row, '');
+        $object->getActiveSheet()->setCellValueByColumnAndRow(3, $total_row, $laba->total_invoice);
+        $object->getActiveSheet()->setCellValueByColumnAndRow(4, $total_row, '');
+        $object->getActiveSheet()->setCellValueByColumnAndRow(5, $total_row, $laba->total_zai);
+        $object->getActiveSheet()->setCellValueByColumnAndRow(6, $total_row, '');
+        $object->getActiveSheet()->setCellValueByColumnAndRow(7, $total_row, $laba->total_saldo_laba);
+        $object->getActiveSheet()->setCellValueByColumnAndRow(8, $total_row, $laba->total_andi);
+        $object->getActiveSheet()->setCellValueByColumnAndRow(9, $total_row, $laba->total_rasit);
+        $object->getActiveSheet()->setCellValueByColumnAndRow(10, $total_row, $laba->total_kantor);
 
         $filename = date('Ymd His');
         $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel2007');
