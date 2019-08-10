@@ -125,6 +125,67 @@ class Laba extends CI_Controller
         $mpdf->Output();
     }
 
+    public function detailpdf($id){
+        $listlaba = $this->M_model->read('list_laba', array('id_laba' => $id))->result();
+        $laba = $this->M_model->read('laba', array('id_laba' => $id))->row();
+
+        $mpdf = new \Mpdf\Mpdf(
+            ['format' => 'A4-L']);
+        $stylesheet = file_get_contents(base_url().'assets/mpdf.css');
+        $mpdf->WriteHTML($stylesheet,1);
+
+        $mpdf->WriteHTML('
+            <table id="customers">
+                <tr>
+                    <th>Customen</th>
+                    <th>No Invoice</th>
+                    <th>Total Invoice</th>
+                    <th>Keterangan</th>
+                    <th>Zai (2,5%)</th>
+                    <th>Biaya Produksi</th>
+                    <th>Saldo Laba</th>
+                    <th>Andi (30%)</th>
+                    <th>Rasit (30%)</th>
+                    <th>Kantor (40%)</th>
+                </tr>
+        ');
+
+        foreach($listlaba as $item){
+            $mpdf->WriteHTML('
+                <tr>
+                    <td>'.$item->customer.'</td>
+                    <td>'.$item->invoice.'</td>
+                    <td>'.number_format($item->total_invoice,0,'.','.').'</td>
+                    <td>'.$item->keterangan.'</td>
+                    <td>'.number_format($item->zai,0,'.','.').'</td>
+                    <td>'.number_format($item->biaya_produksi,0,'.','.').'</td>
+                    <td>'.number_format($item->saldo_laba,0,'.','.').'</td>
+                    <td>'.number_format($item->andi,0,'.','.').'</td>
+                    <td>'.number_format($item->rasit,0,'.','.').'</td>
+                    <td>'.number_format($item->kantor,0,'.','.').'</td>
+                </tr>
+            ');            
+        }
+
+        $mpdf->WriteHTML('
+            <tr>
+                <th colspan="2">Total</th>
+                <th>'.number_format($laba->total_invoice,0,'.','.').'</th>
+                <th></th>
+                <th>'.number_format($laba->total_zai,0,'.','.').'</th>
+                <th></th>
+                <th>'.number_format($laba->total_saldo_laba,0,'.','.').'</th>
+                <th>'.number_format($laba->total_andi,0,'.','.').'</th>
+                <th>'.number_format($laba->total_rasit,0,'.','.').'</th>
+                <th>'.number_format($laba->total_kantor,0,'.','.').'</th>
+            </tr>
+        ');
+
+        $mpdf->WriteHTML('</table>');
+
+        $mpdf->Output();
+    }
+
     public function excel(){
         $this->load->library("excel");
         $object = new PHPExcel();
@@ -173,9 +234,10 @@ class Laba extends CI_Controller
         }
 
         $filename = date('Ymd His');
-        $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel5');
+        $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel2007');
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="Laba'.$filename.'.xls"');
+        header('Content-Disposition: attachment;filename="Laba' . $filename . '.xlsx"');
+        header('Cache-Cpontrol: max-age=0');
         $object_writer->save('php://output');
     }
 

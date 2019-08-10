@@ -280,9 +280,10 @@ class Kantor extends CI_Controller
         }
 
         $filename = date('Ymd His');
-        $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel5');
+        $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel2007');
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="KasMasuk'.$filename.'.xls"');
+        header('Content-Disposition: attachment;filename="Laba' . $filename . '.xlsx"');
+        header('Cache-Cpontrol: max-age=0');
         $object_writer->save('php://output');
     }
 
@@ -363,9 +364,10 @@ class Kantor extends CI_Controller
         }
 
         $filename = date('Ymd His');
-        $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel5');
+        $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel2007');
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="KasKeluar'.$filename.'.xls"');
+        header('Content-Disposition: attachment;filename="Laba' . $filename . '.xlsx"');
+        header('Cache-Cpontrol: max-age=0');
         $object_writer->save('php://output');
     }
 }

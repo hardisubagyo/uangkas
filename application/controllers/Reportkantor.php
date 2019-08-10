@@ -225,10 +225,11 @@ class Reportkantor extends CI_Controller
         $object->getActiveSheet()->setCellValueByColumnAndRow(0, $excel_row_total, "Total");
         $object->getActiveSheet()->setCellValueByColumnAndRow(2, $excel_row_total, $sisa_dana_hari);
 
-        $filename = date('YmdHis');
-        $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel5');
+        $filename = date('Ymd His');
+        $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel2007');
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="LaporanHarian'.$filename.'.xls"');
+        header('Content-Disposition: attachment;filename="Laba' . $filename . '.xlsx"');
+        header('Cache-Cpontrol: max-age=0');
         $object_writer->save('php://output');
     }
 
@@ -449,10 +450,11 @@ class Reportkantor extends CI_Controller
         $object->getActiveSheet()->setCellValueByColumnAndRow(0, $excel_row_total, "Total");
         $object->getActiveSheet()->setCellValueByColumnAndRow(2, $excel_row_total, $sisa_dana_hari);
 
-        $filename = date('YmdHis');
-        $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel5');
+        $filename = date('Ymd His');
+        $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel2007');
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="LaporanPeriode'.$filename.'.xls"');
+        header('Content-Disposition: attachment;filename="Laba' . $filename . '.xlsx"');
+        header('Cache-Cpontrol: max-age=0');
         $object_writer->save('php://output');
     }
 
@@ -773,10 +775,11 @@ class Reportkantor extends CI_Controller
         $object->getActiveSheet()->setCellValueByColumnAndRow(0, $excel_row_total, "Total");
         $object->getActiveSheet()->setCellValueByColumnAndRow(2, $excel_row_total, $sisa_dana_hari);
 
-        $filename = date('YmdHis');
-        $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel5');
+        $filename = date('Ymd His');
+        $object_writer = PHPExcel_IOFactory::createWriter($object, 'Excel2007');
         header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="LaporanPeriode'.$filename.'.xls"');
+        header('Content-Disposition: attachment;filename="Laba' . $filename . '.xlsx"');
+        header('Cache-Cpontrol: max-age=0');
         $object_writer->save('php://output');
     }
 }

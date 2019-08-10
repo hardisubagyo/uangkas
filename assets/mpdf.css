@@ -25,3 +25,11 @@ body {
   background-color: #4CAF50;
   color: white;
 }
+
+.total{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #D3DCE3;
+  color: white;
+}

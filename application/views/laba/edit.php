@@ -283,6 +283,12 @@
                 </div>
                 <input type="hidden" name="id_laba" value="<?php echo $id; ?>">
                 <div class="modal-footer">
+                    <a href="<?php echo site_url('Laba/detailpdf/'.$id); ?>" class="btn btn-success sm">
+                        <i class="fas fa-file-pdf"></i>
+                    </a>
+                    <a href="<?php echo site_url('Laba/detailexcel/'.$id); ?>" class="btn btn-info sm">
+                        <i class="fas fa-file-excel"></i>
+                    </a>
                     <button type="button" class="btn btn-danger delete-row">Hapus</button>
                     <a href="<?php echo site_url('Laba'); ?>">
                         <button type="button" class="btn btn-secondary">Kembali</button>
