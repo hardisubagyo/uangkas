@@ -56,8 +56,8 @@
                                         <?php }else{ ?>
                                             <button type="button" class="btn btn-info btn-sm" style="cursor: no-drop;">Tras Kas</button>
                                         <?php } ?>
-                                        <button type="button" class="btn btn-success btn-sm">Edit</button>
-                                        <button type="button" class="btn btn-danger btn-sm">Hapus</button>
+                                        <a href="<?php echo site_url('Laba/edit/'.$item->id_laba); ?>" class="btn btn-success btn-sm editlaba">Edit</a>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="ConfirmDelete('<?php echo $item->id_laba; ?>')">Hapus</button>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -68,7 +68,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="AddLaba" tabindex="-1" role="dialog" aria-labelledby="AddKasModal" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -204,7 +203,6 @@
                             </tr>
                         </tfoot>
                     </table>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -216,5 +214,9 @@
 </div>
 
 <script type="text/javascript">
-
+  function ConfirmDelete(val)
+  {
+    if (confirm("Hapus Data ?"))
+      location.href='Laba/hapus/'+val;
+  }
 </script>

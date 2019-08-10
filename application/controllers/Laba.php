@@ -10,8 +10,7 @@ class Laba extends CI_Controller
         $this->load->library('form_validation');
         $this->load->model('M_model');
     }
-    public function index()
-    {
+    public function index(){
         $data['tittle'] = 'Presensate Laba';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         //echo 'Selamat datang ' . $data['user']['name'];
@@ -60,7 +59,6 @@ class Laba extends CI_Controller
 
         $this->session->set_flashdata('message','<div class="alert alert-success" role="alert">Laba berhasil ditambah</div>');
         redirect(site_url('laba'));
-
     }
 
     public function tras($id){
@@ -179,6 +177,64 @@ class Laba extends CI_Controller
         header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment;filename="Laba'.$filename.'.xls"');
         $object_writer->save('php://output');
+    }
 
+    public function edit($id){
+
+        $data['tittle'] = 'Presensate Laba';
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $data['laba'] = $this->M_model->read('list_laba', array('id_laba' => $id))->result();
+        $data['id'] = $id;
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('templates/sidebar', $data);
+        $this->load->view('templates/topbar', $data);
+        $this->load->view('laba/edit', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function rubah(){
+        $id = $this->input->post('id_laba');
+        $this->M_model->delete('list_laba', array('id_laba' => $id));
+
+        $count = count($this->input->post('nama_customer'));
+
+        for($x=0; $x < $count; $x++){
+            $list['id_laba'] = $id;
+            $list['customer'] = $this->input->post('nama_customer')[$x];
+            $list['invoice'] = $this->input->post('no_invoice')[$x];
+            $list['total_invoice'] = $this->input->post('total_invoice')[$x];
+            $list['keterangan'] = $this->input->post('keterangan')[$x];
+            $list['zai'] = $this->input->post('zai')[$x];
+            $list['biaya_produksi'] = $this->input->post('biaya_produksi')[$x];
+            $list['saldo_laba'] = $this->input->post('saldo_laba')[$x];
+            $list['andi'] = $this->input->post('andi')[$x];
+            $list['rasit'] = $this->input->post('rasit')[$x];
+            $list['kantor'] = $this->input->post('kantor')[$x];
+            
+            $this->M_model->insert('list_laba',$list);
+        }
+
+        $data = array(
+            'total_invoice' => $this->input->post('total_invoice_all'),
+            'total_zai' => $this->input->post('total_zai'),
+            'total_saldo_laba' => $this->input->post('total_saldo_laba'),
+            'total_andi' => $this->input->post('total_andi'),
+            'total_rasit' => $this->input->post('total_rasit'),
+            'total_kantor' => $this->input->post('total_kantor'),
+        );
+
+        $this->M_model->update('laba',$data, array('id_laba' => $id));
+
+        $this->session->set_flashdata('message','<div class="alert alert-success" role="alert">Laba berhasil diubah</div>');
+        redirect(site_url('laba'));
+    }
+
+    public function hapus($id){
+        $this->M_model->delete('list_laba', array('id_laba' => $id));
+        $this->M_model->delete('laba', array('id_laba' => $id));
+
+        $this->session->set_flashdata('message','<div class="alert alert-success" role="alert">Laba berhasil dihapus</div>');
+        redirect(site_url('laba'));
     }
 }
